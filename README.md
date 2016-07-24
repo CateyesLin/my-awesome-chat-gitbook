@@ -1,3 +1,12 @@
-# My Awesome Book
+![Logo](images/adgtw.jpg)
 
-This file file serves as your book's preface, a great place to describe your book's content and ideas.
+# Android Develop 讀書會
+## 第一回 Workshop - My Awesome Chat 教學
+使用 Firebase Realtime Database 為基礎，打造一個即時聊天 App。
+
+原始碼請參考 GitHub: [https://github.com/CateyesLin/my-awesome-chat](https://github.com/CateyesLin/my-awesome-chat)
+
+# 加入我們
+- 社團網址: [https://www.facebook.com/groups/523386591081376/](https://www.facebook.com/groups/523386591081376/)
+- 活動網址: [https://www.facebook.com/events/531537360363590/](https://www.facebook.com/events/531537360363590/)
+- Telegram 群組: [https://telegram.me/joinchat/AWBi4z-wV9CAkA76ibuTpg](https://telegram.me/joinchat/AWBi4z-wV9CAkA76ibuTpg)
