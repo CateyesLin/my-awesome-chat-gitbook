@@ -10,3 +10,16 @@
 - 社團網址: [https://www.facebook.com/groups/523386591081376/](https://www.facebook.com/groups/523386591081376/)
 - 活動網址: [https://www.facebook.com/events/531537360363590/](https://www.facebook.com/events/531537360363590/)
 - Telegram 群組: [https://telegram.me/joinchat/AWBi4z-wV9CAkA76ibuTpg](https://telegram.me/joinchat/AWBi4z-wV9CAkA76ibuTpg)
+
+## 主辦人員
+
+- Cateyes
+- Charlie
+- Chris
+- Teng
+- Skuld
+- Takuma
+- 阿毛
+- 信宏
+- 彥彬
+- 哲偉
