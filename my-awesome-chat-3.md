@@ -27,7 +27,7 @@ dependencies {
 apply plugin: 'com.google.gms.google-services'
 ```
 
-注意檢查一下，如果已經升級到 SDK 24 的人，請注意修改 `compileSdkVersion` 和 `targetSdkVersion` 還有 `compile 'com.android.support:appcompat-v7:23.4.0'`
+注意！檢查一下，如果已經升級到 SDK 24 或 25 的人，請注意修改 `compileSdkVersion` 和 `targetSdkVersion` 還有 `compile 'com.android.support:appcompat-v7:23.4.0'`在現在的 Android 都會要求你的 support library 要配合你的 SDK 大版本號。
 
 如果不確定哪裡有錯，請複製完整 build.gradle 如下並且蓋過去原本的。
 如果還有錯請檢查上面以下的版本有無配合為同一個大版本號，如：皆為 23 開頭。
@@ -46,7 +46,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.myawesomechat"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -198,25 +198,41 @@ dependencies {
     ...
     //加在這裡，如下
     // Google
-    compile 'com.google.android.gms:play-services-auth:9.0.0'   //提供 Firebase 做 OAuth 登入用的
+    compile 'com.google.android.gms:play-services-auth:10.0.1'   //提供 Firebase 做 OAuth 登入用的
     
     // Firebase
-    compile 'com.google.firebase:firebase-database:9.0.0'   // 這次聊天主要都靠這個 Library
-    compile 'com.google.firebase:firebase-auth:9.0.0'       // 幫助做使用者登入驗證
-    compile 'com.google.firebase:firebase-config:9.0.0'     // 這次遠端變色就靠他了
-    compile 'com.google.firebase:firebase-analytics:9.0.0'  // 使用者行為分析，這次並沒有用到
-    compile 'com.google.android.gms:play-services-appinvite:9.0.0'  // 幫助寄送邀請的，這次並沒有用到
-    compile 'com.google.firebase:firebase-messaging:9.0.0'      // 做推播的，這次並沒有用到
-    compile 'com.google.android.gms:play-services-ads:9.0.0'    // 做廣告的，這次並沒有用到
-    compile 'com.google.firebase:firebase-crash:9.0.0'      // 當機報告，這次並沒有用到
+    compile 'com.google.firebase:firebase-database:10.0.1'   // 這次聊天主要都靠這個 Library
+    compile 'com.google.firebase:firebase-auth:10.0.1'       // 幫助做使用者登入驗證
+    compile 'com.google.firebase:firebase-config:10.0.1'     // 這次遠端變色就靠他了
+    compile 'com.google.firebase:firebase-analytics:10.0.1'  // 使用者行為分析，這次並沒有用到
+    compile 'com.google.android.gms:play-services-appinvite:10.0.1'  // 幫助寄送邀請的，這次並沒有用到
+    compile 'com.google.firebase:firebase-messaging:10.0.1'      // 做推播的，這次並沒有用到
+    compile 'com.google.android.gms:play-services-ads:10.0.1'    // 做廣告的，這次並沒有用到
+    compile 'com.google.firebase:firebase-crash:10.0.1'      // 當機報告，這次並沒有用到
     
-    // Firebase UI
-    compile 'com.firebaseui:firebase-ui-database:0.4.0'     //訊息和使用者列表的元件
+    //使用 FirebaseUI 要注意版本和 Firebase 的相依性，見 README https://github.com/firebase/FirebaseUI-Android
+    compile 'com.firebaseui:firebase-ui-database:1.0.1'	//訊息和使用者列表的元件
+    compile 'com.firebaseui:firebase-ui-auth:1.0.1'	    // FirebaseUI Auth only
+    compile 'com.firebaseui:firebase-ui-storage:1.0.1'	// FirebaseUI Storage only
+    compile 'com.firebaseui:firebase-ui:1.0.1'	// Single target that includes all FirebaseUI libraries above
     //到這為止
 }
 
 apply plugin: 'com.google.gms.google-services'
 ```
+
+補充！此為 FirebaseUI 新版的小地雷！打開 build.gradle (Project: MyAwesomeChat) 在下面這段裡面加上 `maven { url 'https://maven.fabric.io/public' }`。否則會出現 `Error: Failed to resolve: com.twitter.sdk.android:twitter:2.0.0` 這個錯誤。
+
+   ```
+   allprojects {
+       repositories {
+           jcenter()
+
+           // 加上這行
+           maven { url 'https://maven.fabric.io/public' }
+       }   
+   }
+   ```
 
 ### res
 #### layout
@@ -461,8 +477,6 @@ public class MainActivity extends BaseActivity {
 ``` java
 public class MainActivity extends BaseActivity {
 
-    public static final String PUBLIC_ROOM_ID = "public_room_id";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -472,7 +486,7 @@ public class MainActivity extends BaseActivity {
         findViewById(R.id.public_room).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openChatRoom(PUBLIC_ROOM_ID);
+                openChatRoom(Room.PUBLIC_ROOM_ID);
             }
         });
     }
@@ -643,6 +657,7 @@ import java.util.List;
 
 public class Room {
 
+    public static final String PUBLIC_ROOM_ID = "public_room_id";
     public static final String CHILD_NAME = "rooms";
 
     private List<Message> messages = new ArrayList<>();
@@ -694,6 +709,7 @@ public class Room {
 在 Class 裡的最前面宣告一些等等要用到的成員變數。
 
 ```
+    private String chatRoomId;
     private RecyclerView messageRecyclerView;
 
     private Button mSendButton;
@@ -823,7 +839,7 @@ public class Room {
         setContentView(R.layout.activity_chatroom);
         
         //加上以下這段
-        String chatRoomId = getIntent().getStringExtra(EXTRA_ROOM_ID);
+        chatRoomId = getIntent().getStringExtra(EXTRA_ROOM_ID);
         messagesReference = mFirebaseDatabaseReference.child(Room.CHILD_NAME).child(chatRoomId).child(Message.CHILD_NAME);  //將列表要顯示的資料集指定到我們設計的訊息資料結構上。
         initView();
         //到這邊為止
@@ -847,7 +863,10 @@ public class Room {
 }
 ```
 
+等同設為 `true` 也就是任何人都可以讀寫，當然實際要使用時應該要針對這部份調整為你需要的。
+
 ## 檢查點
+
 一邊讓他執行 Build，同時在開始傳訊息前，不妨切回 Firebase Console 上「Database」的「資料」。在傳訊息前先看一下資料下的內容，一邊傳你也會發現資料不斷的在網頁上新增。
 
 拿左右鄰居的手機試著安裝看看，就可以兩個人互相匿名聊天。

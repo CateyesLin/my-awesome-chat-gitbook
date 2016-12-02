@@ -425,8 +425,8 @@ public class User {
     @Override
     public void onStart() {
         super.onStart();
-        //如果使用者已經被登出，則回到使用者列表
-        if(null ==  mFirebaseUser) {
+        //如果使用者已經被登出且不是看公開聊天室，則回到使用者列表
+        if(null == mFirebaseUser && !Room.PUBLIC_ROOM_ID.equals(chatRoomId)) {
             finish();
             return;
         }

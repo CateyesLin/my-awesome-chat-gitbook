@@ -5,3 +5,4 @@
 * [第3章](my-awesome-chat-3.md)
 * [第4章](my-awesome-chat-4.md)
 * [第5章](my-awesome-chat-5.md)
+* [延伸閱讀](resources.md)
